@@ -1,0 +1,66 @@
+template(name="settingsEdit")
+	.ui.padded.white.grid
+		.navigationRow.row
+			.column
+				a.ui.link.icon.basic.left.floated.button(href="{{ pathFor 'settingsList' model=modelName}}")
+					i.arrow.left.icon
+					| Назад к списку
+				unless editDoc.isNew
+					unless editDoc.flags.nodelete
+						.button-delete-object.ui.right.floated.red.basic.button {{_ "button_delete"}}
+					unless editDoc.isCOMPort
+						.button-copy-object.ui.right.floated.basic.blue.button(disabled="{{#if editDoc.changed}}disabled{{/if}}" title="{{#if editDoc.changed}}Объект был изменен, сохраните его, прежде чем делать копию{{/if}}") {{_ "button_copy"}}
+				.editFormHeader
+					if editDoc.isNew
+						| {{ titles.singular }}
+					else
+						| {{ editDoc.title }}
+	.ui.fitted.divider
+	form.ui.form(class="{{#if editDoc.isNew}}objAdd{{else}}objEdit{{/if}}")
+		.ui.padded.grid
+			.basicInfoRow.white.row
+				.column
+					.ui.horizontally.padded.page.grid
+						.column
+							unless editDoc.isNew
+								.basicInfo
+									.ui.red.basic.compact.small.button(class="{{#if hasTagsOrDescription}}right floated{{/if}}") Изменить название, описание или теги
+									if editDoc.description
+										| {{ nl2br editDoc.description }}
+										if editDoc.tagsAsList.length
+											br
+											br
+									.ui.blue.horizontal.labels
+										each editDoc.tagsAsList
+											.ui.label {{ this }}
+							+TextControl label="Название" name="title" value=editDoc.title
+							.field
+								label Теги
+									each editDoc.tagsAsList
+										.ui.objTag.label
+											| {{ this }}
+											i.close.icon
+
+								.ui.selection.dropdown(class="search")
+									input(type="hidden" name="tags" value="{{ editDoc.tags }}")
+									i.dropdown.icon
+									.default.text Вы можете выбрать несколько тегов
+									.menu
+										each addKeys tags
+											.item(data-value="{{ value }}") {{ value }}
+
+							+TextAreaControl label="Описание" name="description" value=editDoc.description optional=true
+			.mainInfoRow.row
+				.column
+					.ui.horizontally.padded.page.grid
+						.column
+							+UI.dynamic(template=objectForm)
+			.white.row
+				.column
+					.ui.horizontally.padded.page.grid
+						.column
+							button.ui.blue.submit.basic.big.button(type="submit")
+								if editDoc.isNew
+									| {{_ "button_add"}} {{ lowercase titles.accusative }}
+								else
+									| {{_ "button_save"}}

@@ -1,0 +1,41 @@
+.subscribeSteps .steps .step
+  background rgba(255,255,255,.8) !important
+
+  &:after
+    background rgba(255,255,255,.8) !important
+
+  &.active, &.active:after
+    background rgba(235,236,237,.8) !important
+
+.stepContainer
+  padding-top 2rem !important
+  padding-bottom 8rem !important
+
+  .planChooser
+    padding-top 2rem !important
+
+    .sub.header
+      padding-top .5rem !important
+
+    i.gift.icon
+      transition .6s box-shadow
+      box-shadow #ccc 1px 1px 10px
+
+    .plan.column
+      cursor pointer
+      &:hover
+        i.gift.icon
+          box-shadow #ccc 10px 10px 10px
+
+      &.selected .header
+        color purple
+
+    .promoBox
+      border-right 1px solid #ccc
+
+      &:hover
+        i.sun.icon
+          animation icon-loading 3s linear infinite
+
+  .planFootnotes .list
+    margin-bottom 2rem !important

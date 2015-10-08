@@ -1,0 +1,135 @@
+template(name="subscribeLayout")
+  .stepContainer.ui.container
+    
+    +Template.dynamic template=stepTemplate
+    
+    .subscribeSteps.ui.fixed.bottom.sticky.container
+      .ui.grid
+        .column
+          .ui.four.small.steps
+            +subscribeStep(name="plan"    icon="gift"     title=planStepSubtitle)
+            +subscribeStep(name="dog"     icon="paw"      title=dogStepSubtitle)
+            +subscribeStep(name="owner"   icon="truck"    title=ownerStepTitle)
+            +subscribeStep(name="payment" icon="payment"  title="Оплата")
+
+template(name="subscribePlan")
+  .ui.center.aligned.large.header Какой ваш план?
+
+  .planFootnotes.ui.center.aligned.grid
+    .twelve.wide.left.aligned.column
+      .ui.very.relaxed.divided.list
+        .item
+          | Вы оплачиваете одну или несколько коробок сразу. Чем больше — тем дешевле становится коробка!
+
+        .item
+          | Оплата за следующие коробки происходит автоматически раз в месяц. Мы будем предупреждать вас заранее и вы всегда сможете отказаться от подписки.
+
+        .item
+          | Вы всегда сможете перейти на более выгодный тариф в будущем.
+            
+        .item
+          | Вы можете заказать промо-коробку. Она меньше и дешевле, чтобы вы могли убедиться в нашем качестве перед подпиской.
+
+  .planChooser.ui.padded.center.aligned.grid
+    .five.column.row
+      .plan.promoBox.column(data-plan="0" class="{{ planIsSelected '0'}}")
+        i.huge.icons
+          i.big.sun.orange.icon
+          i.paw.icon
+        .ui.header 
+          |1500 рублей
+          br
+          |Промо-коробка
+          .sub.header Без подписки
+
+      .plan.column(data-plan="1" class="{{ planIsSelected '1'}}")
+        i.huge.gift.circular.red.icon
+        .ui.header 
+          |2990р. за коробку
+          br
+          |1 месяц
+      .plan.column(data-plan="3" class="{{ planIsSelected '3'}}")
+        i.huge.gift.circular.orange.icon
+        .ui.header 
+          |2490р. за коробку
+          br
+          |3 месяца
+          .sub.header Дешевле на 17%
+      .plan.column(data-plan="6" class="{{ planIsSelected '6'}}")
+        i.huge.gift.circular.blue.icon
+        .ui.header 
+          |2190р. за коробку
+          br
+          |6 месяцев
+          .sub.header Дешевле на 27%
+      .plan.column(data-plan="12" class="{{ planIsSelected '12'}}")
+        i.huge.gift.circular.purple.icon
+        .ui.header 
+          |1990р. за коробку
+          br
+          |12 месяцев
+          .sub.header Дешевле на 34%
+  
+template(name="subscribeStep")
+  a.step(href="{{stepPath}}" class="{{stepCompleted}} {{isActivePath stepPath}} {{stepDisabled}}")
+    i(class="{{icon}} icon")
+    .content
+      .title {{title}}
+      if subtitle
+        .description {{subtitle}}
+
+template(name="subscribeDog")
+  .ui.center.aligned.large.header Кому мы собираем коробку?
+  .ui.padded.grid
+    .column
+      +autoForm schema="SB.Schemas.Animal" id="subscribeDogForm" doc=animalData
+        .three.fields
+          +afQuickField name="name" label=false placeholder="Имя"
+          +afQuickField name="breed" label=false placeholder="Порода" fullTextSearch=true options="allowed"
+          +afQuickField name="age" label=false placeholder="День рождения"
+        .three.fields
+          +afQuickField name="sex"
+          +afQuickField name="size"
+          +afQuickField name="story"
+        .ui.center.aligned.basic.segment
+          button(type="submit").ui.large.pink.basic.button Дальше
+
+template(name="subscribeOwner")
+  .ui.center.aligned.large.header Кому и куда доставляем коробку?
+  
+  unless currentUser
+    +login
+    .ui.divider
+
+  .ui.padded.centered.grid
+    .ten.wide.column
+      +ownerForm
+
+  .ui.center.aligned.basic.segment
+    a.ui.large.pink.basic.link.button(href="{{ nextStepPath}}" class="{{#unless ownerIsReady}}disabled{{/unless}}") Дальше
+
+template(name="subscribePayment")
+  .ui.center.aligned.large.header Оплата подписки
+  
+  .ui.centered.very.padded.grid
+    .ui.raised.segment.very.padded.eight.wide.column
+      | Здесь форма привязки карты в iframe от яндекса
+  
+  .ui.center.aligned.basic.segment
+    .paymentCompleteStub.ui.large.pink.basic.button Допустим, оплатили
+
+    //-   form.ui.form(action="https://demomoney.yandex.ru/eshop.xml" method="POST")
+    //-     input(type="hidden" name="ShopId" value="42258")
+    //-     input(type="hidden" name="scid" value="525852")
+    //-     input(type="hidden" name="CustomerNumber" value="{{currentUser._id}}")
+    //-     //- input(type="hidden" name="orderNumber" value="")
+    //-     input(type="hidden" name="shopSuccessURL" value="https://sobabox.ru/user")
+    //-     input(type="hidden" name="shopFailURL" value="https://sobabox.ru/user")
+    //-     input(type="hidden" name="Sum" value="3000")
+    //-     input(type="hidden" name="paymentType" value="AC")
+    //-     input(type="hidden" name="cps_email" value="{{ currentUser.username }}")
+    //-     
+    //-     button.ui.large.green.submit.button(type="submit") Выбрать этот план
+    //-         
+    //-   
+    //- p После заполнения регистрационной формы и выбора плана автоматически создаётся аккаунт (где-нибудь даём возможность быстренько поставить свой пароль, а вообще - отправляем пароль на почту), и юзер отправляется привязывать карту в payture.

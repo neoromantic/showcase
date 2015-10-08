@@ -1,0 +1,26 @@
+template(name="homePage")
+  .promo.ui.container.grid
+    .middle.aligned.center.aligned.column
+      .ui.huge.center.aligned.header Коробка раз в месяц у вашей двери.
+      .ui.huge.center.aligned.header Вкусное, нужное и полезное для вашего друга.
+      .ui.huge.center.aligned.pink.header Собабокс. 
+      .ui.center.aligned.basic.segment
+        a.ui.large.link.basic.blue.button(href="{{pathFor '/subscribe/plan'}}") Оформить подписку
+
+  .ui.container
+    .ui.three.column.padded.relaxed.grid
+      .column
+        .ui.small.header Все наши коробки уникальны
+        p Новый набор каждый месяц, специальный для каждой собаки, учитывая её пол, возраст, породу, ваши пожелания и отзывы.
+        //- a(href="{{ pathFor 'tour'}}") Узнать больше о нашем процессе
+
+      .column
+        .ui.small.header Вы не купите это в магазине
+        p Вкусняшки, сделанные вручную. Несгрызаемые игрушки. Новейшие гаджеты. Товары, сделанные на заказ именно для вашей собаки.
+        //- a(href="{{ pathFor 'tour'}}") Узнать больше о содержимом коробок
+
+      .column
+        .ui.small.header Любовь прежде выгоды
+        p Собабокс — семейный бизнес. У нас нет наёмных сотрудников, мы лично отвечаем за каждую мелочь и помним каждую собаку.
+        //- a(href="{{ pathFor 'tour'}}") Узнать больше о Люсе, Сергее и Томасе
+        

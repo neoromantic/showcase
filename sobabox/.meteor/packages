@@ -1,0 +1,38 @@
+# Meteor packages used by this project, one per line.
+# Check this file (and the other files in this directory) into your repository.
+#
+# 'meteor add' and 'meteor remove' will edit this file for you,
+# but you can also edit it by hand.
+
+meteor-platform
+kadira:flow-router
+coffeescript
+semantic:ui
+mquandalle:jade
+mquandalle:stylus
+accounts-password
+kadira:blaze-layout
+arillo:flow-router-helpers
+flemay:less-autoprefixer
+zimme:active-route
+accounts-facebook
+reactive-var
+meteorhacks:picker
+meteorhacks:npm
+
+
+npm-container
+aldeed:autoform
+aldeed:collection2
+email
+fabienb4:autoform-semantic-ui
+http
+meteorhacks:fast-render
+meteorhacks:subs-manager
+service-configuration
+splendido:accounts-emails-field
+splendido:accounts-meld
+neoromantic:model
+stevezhu:lodash
+workman:templating-ext
+momentjs:twix

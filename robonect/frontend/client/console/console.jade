@@ -1,0 +1,24 @@
+template(name="console")
+	.ui.padded.grid
+		.row
+			.six.wide.column
+				+SelectControl(name="COMPort" placeholder="Выберите подключение" options=portOptions fieldClass="fluid")
+			.six.wide.column
+				.ui.button(class="{{#unless chosenPort}}disabled{{/unless}} {{#if lockedPort}} green releaseLockButton {{ else }} red getLockButton {{/if}}")
+					if lockedPort
+						| {{_ "console_release_write_access"}}
+					else
+						| {{_ "console_get_write_access"}}
+			.four.wide.right.aligned.column
+				a.ui.link.basic.icon.button(href="{{ pathFor 'settingsList' model='connection' }}") 
+					i.setting.icon
+					|Управление подключениями
+
+		if chosenPort
+			.row
+				.column
+					.ui.basic.white.segment
+						+iframeConsole
+
+template(name="iframeConsole")
+	iframe.consoleFrame(src="/_ssh/{{ adjustedPortId }}/?auth_token={{ auth_token }}" width="100%")

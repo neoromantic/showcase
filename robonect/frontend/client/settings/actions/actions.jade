@@ -1,0 +1,77 @@
+template(name="actionHeaders")
+	th Сценарий
+	th.table-action-connection {{_ "settings_actions_connection"}}
+	th.collapsing
+	th.collapsing
+
+template(name="actionItem")
+	td.object-title
+		| {{ title }}
+	td
+		+scenarioList scenario=scenario showParams=false
+	td
+		if connection
+			| {{ connection.title }}
+	td.collapsing
+		if schedule
+			.ui.tiny.red.horizontal.label(title="Действие запускается автоматически по расписанию {{schedule}}") {{schedule}}
+	td.collapsing
+		if canExecute
+			.btn-run-action.ui.tiny.red.basic.compact.icon.button
+				i.play.icon(title="Запустить действие")
+		if utility
+			i.wrench.icon(title="Является утилитой")
+
+template(name="scenarioList")
+	if scenario.length
+		.popupButton.ui.basic.compact.button {{ scenario.length}} {{__ scenario.length "шаг" "шага" "шагов"}}
+		.scenarioPopup.ui.flowing.popup
+			.header Сценарий
+			.ui.ordered.divided.large.list
+				each displayScenario
+					.item
+						if exec
+							each actioncall.params
+								| {{ value }}
+						else
+							.header
+								a(href="{{pathFor 'settingsEdit' model='action' slug=actioncall.action.slug}}") {{ actioncall.action.title }}
+							if actioncall.params.length
+								ul.ui.list
+									each actioncall.params
+										li {{ param }}: {{ value}}
+
+template(name="actionEditForm")
+	.two.fields
+		+SelectControl(search=true label="Подключение" name="connection" options=connectionOptions value=editDoc.connection.id placeholder="Наследуется")
+		+TextControl(label="Лимит времени на исполнение действия" name="ttl" placeholder="Время в секундах" value=editDoc.ttl)
+
+	.two.fields
+		+TextControl(optional=true label="Расписание" name="schedule" placeholder="Введите число и период. Примеры: 5m, 2h, 1d" value=editDoc.schedule fieldhelptext="Возможные периоды: s (сек), m (мин), h (часы), d (дни)")
+		+TextControl(optional=true label="Выполнять не чаще 1 раза в" name="execution_limit" placeholder="Время в секундах" value=editDoc.execution_limit)
+
+	+CheckboxControl(optional=true label="Использовать действие как утилиту" name="utility" value=editDoc.utility toggle=true)
+		| {{{_ "settings_actions_utility_help"}}}
+
+	//- Входящие параметры для создаваемого действия
+
+	if editDoc.dependents
+		.ui.message
+			| {{_ "settings_actions_has_dependents"}}:
+			.ui.divided.list
+				each editDoc.dependents
+					.item
+						a.header(href="{{ pathFor 'settingsEdit' model=objectType id=id}}") {{title}}
+		if editDoc.params
+			strong {{_ "settings_actions_params"}}
+			.ui.divided.list
+				each editDoc.params
+					.item
+						.header {{ param }}
+
+
+	else
+		+ArrayControl(optional=true label="Параметры" name="params" array=editDoc.params itemTitle="параметр")
+			+TextControl(placeholder="Назовите параметр" value=item.param name="params.$.param" index=item.index label=false optional=true)
+
+	+scenarioForm

@@ -1,0 +1,29 @@
+template(name="triggerHeaders")
+	th Условия
+	th Действия
+
+template(name="triggerItem")
+	td.object-title
+		| {{ title }}
+	td
+		.condition-list
+			each conditions
+				.condition-item
+					a(href="{{pathFor 'settingsEdit' model='metric' slug=metric.slug}}") {{ metric.title }}
+					em {{ functionAsText }}
+					span.compare_value {{ value }}
+	td
+		+scenarioList showParams=true scenario=scenario
+
+template(name="triggerEditForm")
+
+	+ArrayControl label="Условия срабатывания триггера" name="conditions" array=editDoc.conditions itemTitle="условие"
+		+SelectControl search=true index=item.index name="conditions.$.metric" options=modelOptions.Metric value=item.metric.id placeholder="Укажите метрику"
+
+		if item.metric
+			.two.fields
+				+SelectControl name="conditions.$.function" index=item.index options=item.typeOptions value=item.function placeholder="Функция"
+				unless item.metric.isBoolean
+					+TextControl name="conditions.$.value" index=item.index value=item.value placeholder="Значение"
+
+	+scenarioForm

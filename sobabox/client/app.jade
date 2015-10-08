@@ -1,0 +1,35 @@
+template(name="topMenu")
+  .ui.container
+    .ui.secondary.menu
+      a.header.item(href="/") Собабокс
+      .right.menu
+        unless currentUser
+          a.ui.item(href="/login") Войти
+        else
+          a.ui.item(href="/user") Личный кабинет
+          a.ui.item(href="/logout") Выйти
+
+template(name="footer")
+  .footer.ui.basic.pink.segment
+    .ui.horizontal.right.floated.list
+      .disabled.item © 2015, ИП Петров С.С.
+    //- .ui.horizontal.relaxed.list
+    //-   a.disabled.item(href="") Вопросы и ответы
+    //-   a.disabled.item(href="") Контактная информация
+    //-   a.disabled.item(href="") Условия использования
+
+template(name="mainLayout")
+  +topMenu
+  .contentLayout
+    +Template.dynamic template=content
+  +footer
+
+template(name="noFooterLayout")
+  +topMenu
+  +Template.dynamic template=content
+
+template(name="emptyLayout")
+  +Template.dynamic template=content
+
+template(name="stubPage")
+  | nothing to see, move along

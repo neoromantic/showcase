@@ -1,0 +1,66 @@
+template(name="databrowser")
+	.metricList
+		.ui.vertical.blue.menu
+			.header.item
+				+textFilter(placeholder="Фильтр по названию")
+
+			if metrics.selected
+				.header.item
+					| Выбранные метрики
+					i.clearMetrics.close.right.floated.red.icon
+				each metrics.selected
+					.link.active.item
+						| {{ title }}
+			if metrics.others
+				.header.item Метрики
+				each metrics.others
+					.link.item(class="{{#if hidden}}hidden{{/if}}")
+						| {{ title }}
+	.databrowser
+		if metrics.selected
+			.ui.padded.grid
+				.centered.column
+					.ui.form
+						.metricOptions.five.fields
+							+SelectControl label="Отображение" value=options.type options=typeOptions name="type" optional=true class="widgetType four wide"
+							+SelectControl label="Агрегация" value=options.resolution options=resolutionOptions name="resolution" optional=true
+							+SelectControl label="Количество" value=options.limit options=limitOptions name="limit" optional=true class="two wide"
+							+DateTimeControl label="Не ранее чем" placeholder="Дата и время" name="date_from" value=options.date_from optional=true
+							+DateTimeControl label="Не позднее чем" placeholder="Дата и время" name="date_to" value=options.date_to optional=true
+
+					.ui.divider
+					.ui.padded.doubling.stackable.grid
+						.center.aligned.row
+							.column
+								.btn-add-to-dashboard.ui.basic.red.compact.small.button {{_ "databrowser_add_to_dashboard"}}
+								if typeEqual 'table'
+									.btn-save-to-csv.ui.basic.blue.compact.small.button {{_ "databrowser_save_to_csv"}}
+						.row
+							.centered.column(class="{{#if eq widget.type 'digest'}} {{#if eq widget.metric_ids.length 1}}eight wide{{/if}}{{/if}}")
+								.databrowserWidget.ui.white.segment(class="{{widget.majorType}}Type")
+									with widget=widget
+										+widgetTemplate widget
+
+		else
+			.noMetricsSelected {{_ "databrowser_should_select_metric"}}
+
+template(name="dateRangeChooser")
+	if movingWindowSize
+		input.movingWindowInput(type="number" max="1000" min="1" value="{{ movingWindowSize }}")
+		| {{ movingWindowLabel }}
+		.btn-toggleMovingWindow.ui.button
+			i.calendar.icon
+	else
+		+dateFromChooser
+		| —
+		+dateToChooser
+		.btn-toggleMovingWindow.ui.icon.button
+			i.remove.icon
+
+template(name="dateFromChooser")
+	.datetimepicker#datetime_from
+		input(type="text" placeholder="Начало периода")
+
+template(name="dateToChooser")
+	.datetimepicker#datetime_to
+		input(type="text" placeholder="Конец периода")

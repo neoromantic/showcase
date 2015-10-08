@@ -1,0 +1,27 @@
+template(name="yandex")
+  .ui.centered.grid
+    .eight.wide.column
+      .ui.segment
+        .ui.form
+          .field
+            label Номер карты
+            input(type="text" name="number")
+          .two.fields
+            .field
+              label Срок действия
+              input(type="text" name="expire")
+            .field
+              label CVV
+              input(type="text" name="cvv")
+          
+          .addCard.ui.large.green.link.button
+            if price
+              |Оплатить {{ price }} р.
+            else
+              |Добавить карту
+
+      if price
+        p С вашей карты будут списаны деньги сразу за 6 месяцев, в дальнейшем повторные списания будут происходить автоматически раз в месяц. 
+        p Вы можете в любой момент отказаться от подписки, каждый раз перед списыванием за очередной месяц мы будем вас предупреждать.
+      else
+        p Для проверки карты мы спишем с неё один рубль и вернём его обратно

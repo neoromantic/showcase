@@ -1,0 +1,10 @@
+template(name="scenarioForm")
+	.scenario
+		<!-- Действия сценария и их параметры -->
+		+ArrayControl name="scenario" label="Сценарий" array=editDoc.scenario itemTitle="шаг" ordered=true
+			+SelectControl search=true index=item.index name="scenario.$.action" options=modelOptions.Action value=item.action.id placeholder="Укажите действие"}}
+
+			each addIndex item.params
+				with parentIndex=../item.index param=param value=value index=index
+					+HiddenInput name=actionParamTitleName value=param index=index
+					+TextControl label=param name=actionParamValueName placeholder="" value=value index=index

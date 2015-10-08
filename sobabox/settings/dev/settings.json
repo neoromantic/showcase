@@ -1,0 +1,12 @@
+{
+  "public": {
+    "env": "dev"
+  },
+  "oauth": {
+		"facebook": {
+	    "appId": "185107361821188",
+	    "requestPermissions": ["public_profile", "email"],
+    	"secret": "ace74f0e5a286d01439b9840b7e553b8"
+		}
+	}
+}

@@ -1,0 +1,111 @@
+template(name="userCardList")
+  if currentUser.profile.cards
+    table.ui.basic.table
+      tbody
+        each currentUser.profile.cards
+          tr(class="{{#if primary}}positive{{/if}}") 
+            td {{ number }}
+            td {{ expire }}
+            td
+              if canBecomePrimary
+                .makeCardPrimary.ui.small.basic.blue.button Сделать основной
+              .removeCard.ui.small.basic.red.button Удалить
+  else
+    p У вас нет привязанных карт    
+
+  a.addCard.ui.basic.green.button(href="") Добавить карту
+
+template(name="userHomePage")
+  .ui.container
+    .ui.padded.vertically.divided.grid
+      .row
+        .column
+          .ui.pink.inverted.very.padded.top.attached.segment
+            unless currentUser.activeSubscription
+              .ui.large.header У вас пока еще нет подписки
+                a.ui.inverted.basic.right.floated.button(href="{{pathFor '/subscribe/plan'}}") Оформить
+            else
+              .ui.grid
+                .ten.wide.column
+                  .ui.large.inverted.header Вы оплатили {{_ currentUser.activeSubscription.monthsLeft "месяц" "месяца" "месяцев"}}
+                  p Ближайшая коробка будет отправлена 17 июня
+                  p Следующая оплата произойдет 30 июня, 1990 рублей
+                .six.wide.right.aligned.column
+                  p
+                    .editBoxOptions.ui.inverted.basic.button Изменить информацию о вашей собаке
+                  p
+                    .cancelSubscription.ui.inverted.basic.disabled.button Отменить подписку
+          .boxOptions.ui.secondary.padded.bottom.attached.hidden.segment
+            +autoForm collection="SB.Users.collection" id="editDogForm" doc=currentUser type="update"
+              .three.fields
+                +afQuickField name="profile.animal.name" placeholder="Имя"
+                +afQuickField name="profile.animal.breed" placeholder="Порода" fullTextSearch=true options="allowed"
+                +afQuickField name="profile.animal.age" placeholder="День рождения"
+              .three.fields
+                +afQuickField name="profile.animal.sex"
+                +afQuickField name="profile.animal.size"
+                +afQuickField name="profile.animal.story"
+              .ui.center.aligned.basic.segment
+                button(type="submit").ui.large.basic.blue.button Сохранить
+      .row
+        .ten.wide.column
+          .ui.header 
+            if currentUser.name
+              |{{ currentUser.name }}
+              .sub.header {{ currentUser.email }}
+            else
+              |{{ currentUser.email }}
+
+          .profileSummary
+            if currentUser.addressCombined
+              p Адрес доставки: {{ currentUser.addressCombined }}
+            if currentUser.profile.phone
+              p Телефон для связи: {{ currentUser.profile.phone }}
+
+            if profileIsntComplete
+              .ui.basic.pointing.below.orange.label
+                | Нам нужно знать ваш{{profileIsntComplete}}
+            p
+              .editProfile.ui.blue.basic.button 
+                if profileIsntComplete 
+                  | Дополнить
+                else
+                  | Изменить 
+                |контактную информацию
+
+          .editProfileForm
+            +ownerForm
+
+        .six.wide.column
+          .ui.header Оплата
+          +userCardList
+
+    //-   .ui.basic.segment
+    //-     .ui.header Здравствуйте, {{ currentUser.profile.name }}
+    //-     ul
+    //-       li Имя, емейл, телефон
+    //-       li Всё, что связано с доставкой: адрес, комментарии, whatever
+    //- 
+    //-   if currentUser.profile.animal
+    //-     .ui.basic.segment
+    //-       .ui.header Ваша собака
+    //-       with currentUser.profile.animal
+    //-         ul
+    //-           li {{ name }}
+    //-           li {{ age }}
+    //-           li {{ breed }}
+    //-           li {{ sex }}
+    //-           li {{ weight }}
+    //- 
+    //-       .ui.button Изменить
+    //- 
+    //- .ten.wide.column
+    //-   .ui.segment
+    //-     .ui.header Ваша подписка
+    //-     ul
+    //-       li Если подписки нет — красивое предложение подписаться
+    //-       li Если есть — дата отправки следующей коробки
+    //-       li Возможность повлиять на состав будущей коробки (ограничено по времени)
+    //-       li Возможность оставить отзыв (приложить фото — дадим скидку!) о предыдущих коробках (ограничено по времени)
+    //-       li Отмена подписки
+    //-       li Смена тарифного плана

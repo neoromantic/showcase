@@ -1,0 +1,13 @@
+template(name="ownerForm")
+  +autoForm collection="SB.Users.collection" id="subscribeOwnerForm" doc=currentUser  autosave=true type="update" autosaveOnKeyup=true trimStrings=false
+    .three.fields
+      +afQuickField name="profile.firstName" placeholder="Имя" label=false
+      +afQuickField name="profile.lastName" placeholder="Фамилия" label=false
+      +afQuickField name="profile.phone" placeholder="Телефон" label=false
+    .four.fields
+      +afQuickField name="profile.address.city" formgroup-class="five wide" placeholder="Город" label=false
+      +afQuickField name="profile.address.street" formgroup-class="five wide" placeholder="Улица" label=false
+      +afQuickField name="profile.address.premise" formgroup-class="three wide" placeholder="Дом" label=false
+      +afQuickField name="profile.address.apartment" formgroup-class="three wide" placeholder="Квартира" label=false
+
+    +afQuickField name="profile.address.description" placeholder="Комментарии для курьера" label=false

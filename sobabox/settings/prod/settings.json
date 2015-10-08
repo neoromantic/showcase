@@ -1,0 +1,13 @@
+{
+  "public": {
+    "env": "prod",
+    "hideWeb": false
+  },
+  "oauth": {
+		"facebook": {
+	    "appId": "185107035154554",
+	    "requestPermissions": ["public_profile", "email"],
+    	"secret": "edaa68280bce6275a27c2985c33b2c60"
+		}
+	}
+}

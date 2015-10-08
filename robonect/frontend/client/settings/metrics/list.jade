@@ -1,0 +1,19 @@
+template(name="metricHeaders")
+	th.metric-type.two.wide {{_ "settings_metrics_type"}}
+	th {{_ "settings_metrics_unit"}}
+	th.metric-source {{_ "settings_metrics_source"}}
+	th.collapsing.right.aligned.two.wide {{_ "settings_metrics_lastupdate"}}
+
+template(name="metricItem")
+	td.object-title {{ title }}
+	td.metric-type {{ humanType }}
+	td.metric-type {{ unitFull }}
+	td.metric-source-value
+		if action
+			| {{ action.title }}
+		else
+			| {{ connection.title}}
+
+	td.right.aligned(title="{{ lastValue.value }}")
+		if lastValue.timestamp
+			a.metric-link(href="#") {{ formatDate lastValue.timestamp }}

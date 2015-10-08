@@ -1,0 +1,63 @@
+.action-result
+	font-family Menlo, Monaco, Consolas, "Courier New", monospace
+	font-size 90%
+
+	word-break break-all
+	word-wrap break-word
+
+	position relative
+
+	margin-bottom 1em
+
+	min-height 60px
+
+	.rotate-action-result
+		float right
+
+	.action-result-line
+
+		margin 0
+		line-height 1.5
+
+		.line-number, .line-text-word
+			cursor pointer
+
+		.line-text-word:hover, .line-number:hover, .hovered
+			background-color #666
+			color white
+
+		.line-text-whitespace
+			white-space pre
+
+
+		.line-number
+			width 30px
+			text-align center
+			border-right 1px solid #999
+			margin-right 1em
+			float left
+
+	.line-number.selected, .line-text-word.selected, .line-text-whitespace.selected
+		background-color: #633 !important
+		color white
+
+	.line-number.matched, .line-text .matched
+		background-color #363
+		color white
+
+	.line-number.selected.matched
+		background-color #663 !important
+
+
+.metric-line-parser, .metric-word-parser
+	label
+		float left
+		line-height 34px
+
+	span
+		display block
+		overflow hidden
+		padding 0 10px 0 5px
+
+		input
+			width 100%

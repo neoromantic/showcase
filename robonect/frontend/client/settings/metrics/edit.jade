@@ -1,0 +1,79 @@
+template(name="metricEditForm")
+	.ui.grid
+		.four.wide.column
+			.grouped.fields
+				label(for="dataSource") Тип источника данных
+				.inline.field
+					.ui.radio.checkbox
+						input(type="radio" name="dataSource" value="action" checked="{{#if dataSourceIsAction}}checked{{/if}}")
+						label Действие
+				.inline.field
+					.ui.radio.checkbox
+						input(type="radio" name="dataSource" value="connection" checked="{{#unless dataSourceIsAction}}checked{{/unless}}")
+						label Подключение
+		.twelve.wide.column
+			if dataSourceIsAction
+				+SelectControl label="Источник" search=true name="action" options=modelOptions.Action value=editDoc.action.id placeholder="Укажите действие"
+			else
+				+SelectControl label="Источник" search=true name="connection" options=connectionOptions value=editDoc.connection.id placeholder="Выберите подключение"
+
+	.ui.divider
+
+	if editDoc.action
+		if editDoc.action.canExecute
+			.action-result.ui.inverted.segment
+				unless actionText
+					.ui.active.dimmer
+						.ui.indeterminate.text.loader Действие запускается
+				else
+					if actionText.error
+						.ui.message
+							strong {{_ "settings_metrics_execute_error"}}
+							| {{ actionText.message }}
+					else
+						each actionText.message
+							with editDoc=../editDoc index=index line=line
+								.action-result-line
+									span.line-number(class="{{#if lineIsSelected}}selected{{/if}} {{#if lineIsMatched}}matched{{/if}}") {{ index }}
+									span.line-text
+										| &nbsp;
+										if line.length
+											each line
+												with editDoc=../editDoc index=index word=word lindex=lindex
+													span(class="{{#if index}}line-text-word{{else}}line-text-whitespace{{/if}}{{#if wordIsSelected lindex}} selected{{/if}}")
+														| {{{ word }}}
+										else
+											| &nbsp;
+		else
+			.ui.message
+				| {{_ "settings_metrics_no_interactive"}}
+				| ({{#if editDoc.action.params}}{{_ "settings_metrics_no_interactive_params"}}{{else}}{{_ "settings_metrics_no_interactive_scenario"}}{{/if}})
+
+	p {{_ "settings_metrics_regexp_help"}}
+	+TextControl optional=true label="Фильтр для строк" name="line_regexp" placeholder="Регулярное выражение" value=editDoc.line_regexp disabled=disabledRegexp
+	+TextControl(optional=true label="Regexp для метрики" name="word_regexp" placeholder="Регулярное выражение, значение в круглых скобках" value=editDoc.word_regexp disabled=disabledRegexp)
+
+	if actionText
+		unless disabledRegexp
+			| {{ matchedText }}
+
+	.ui.divider
+
+	div(class="{{#if editDoc.isBoolean}}three fields{{else}}{{#if editDoc.isNumber}}{{#if editDoc.isFloat}}four fields{{else}}three fields{{/if}}{{else}}eight wide field{{/if}}{{/if}}")
+		+SelectControl label="Тип параметра" name="type" placeholder="Укажите тип параметра" options=editDoc.fields.type.options value=editDoc.type
+		if editDoc.isBoolean
+			+SelectControl label="Условие" name="function" placeholder="Функция" options=editDoc.fields.function.options value=editDoc.function
+			+TextControl label="Значение" name="value" placeholder="Значение" value=editDoc.value
+		if editDoc.isNumber
+			+SelectControl label="Единица измерения" name="unit" search=true placeholder="В чём измеряет эта метрика?" options=editDoc.fields.unit.options value=editDoc.unit optional=true
+			if editDoc.isFloat
+				+TextControl label="Знаков после запятой" name="precision" value=editDoc.precision optional=true
+			+TextControl label="Множитель" name="multiplier" value=editDoc.multiplier optional=true
+
+	+SelectControl class="eight wide" label="Агрегация" name="aggregate" placeholder="Укажите принцип агрегации метрики" options=editDoc.aggregates value=editDoc.aggregate
+	.ui.grid
+		.four.wide.column
+			+TextControl optional=true label="Пропуск дублей" name="limit_duplicate_save" placeholder="Введите число и период. Примеры: 5m, 2h, 2d" value=editDoc.limit_duplicate_save
+		.twelve.wide.column 
+			br 
+			| {{_ "settings_metrics_duplicate_help"}}

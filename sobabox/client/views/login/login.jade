@@ -1,0 +1,30 @@
+template(name="loginPage")
+  .loginPage
+    +login
+
+template(name="login")
+  .loginForm.ui.relaxed.centered.padded.middle.aligned.stackable.grid
+    .five.wide.right.aligned.column
+      .loginWithFacebook.ui.blue.fluid.icon.button 
+        i.facebook.icon
+        |Войти через facebook
+      br 
+      .loginWithVK.ui.blue.fluid.icon.button 
+        i.vk.icon
+        |Войти через VK
+
+    .one.wide.center.aligned.column
+      .ui.vertical.divider или
+
+    .five.wide.left.aligned.column
+      form.signupForm
+        .ui.fluid.input(class="{{#if emailIsKnown}}icon{{/if}}")
+          input(type="email" name="email" placeholder="Ваш адрес электронной почты")
+          if emailIsKnown
+            i.privacy.pink.icon
+        br
+        .ui.fluid.input(class="{{#unless emailIsValid}}disabled{{/unless}} {{#if validNewUser}}action{{/if}}")
+          input(type="password" name="password" placeholder="{{#if emailIsKnown}}Мы знаем этот емейл, введите пароль{{else}}Придумайте пароль, от 6 символов{{/if}}")
+          if validNewUser
+            button.ui.pink.right.icon.button(type="submit" title="Зарегистировать нового пользователя")
+              i.add.user.icon
